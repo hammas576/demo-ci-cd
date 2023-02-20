@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: Work Camp Doc's
+  description: |-
+    This is a sample APIs doc for HR in the work camp app
+servers:
+  - url: http://server.sofit.ltd:34003/api/hr
+  - url: http://localhost:4500/api/hr
+tags:
+  - name: Leave_Management
+    description: All endpoints about the Leave Management
+paths:
+  /leave/:
+    post:
+      tags:
+        - Leave_Management
+      summary: User can create leave
+      description: This api end point is used t create leave
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaveType:
+                  type: string
+                  example: SICK
+                description:
+                  type: string
+                startDate:
+                  type: string
+                endDate:
+                  type: string
+      responses:
+        '200': # status code
+          description: return success message.
+        '409': # status code
+          description: Invalid Id
+        '403': # status code
+          description: Unauthorized User
+            components:
+      securitySchemes:
+          bearerAuth: # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+      security:
+        - BearerAuth: []
+    get:
+      tags:
+        - Leave_Management
+      summary: fetch all users leave in the camp
+      description: This api endpoint get all leaves
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: leaveType
+          in: query
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '409':
+          description: Confict
+      components:
+        securitySchemes:
+          bearerAuth: # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+      security:
+        - BearerAuth: []
+  /my-leave/:
+    get:
+      tags:
+        - Leave_Management
+      summary: fetch all my leave in the camp
+      description: This api endpoint get all leaves
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: leaveType
+          in: query
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '409':
+          description: Confict
+      components:
+        securitySchemes:
+          bearerAuth: # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+      security:
+        - BearerAuth: []
+
+  /leave/{id}/:
+    get:
+      tags:
+        - Leave_Management
+      summary: fetch users leave in the camp by leave id
+      description: This api endpoint get leaves by id
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leave
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '409':
+          description: Confict
+      components:
+        securitySchemes:
+          bearerAuth: # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+      security:
+        - BearerAuth: []
+    put:
+      tags:
+        - Leave_Management
+      summary: Admin update leave status
+      description: This api is used to Approved or Reject user leave in the camp
+      parameters:
+        - name: id
+          in: path
+          description: ID of the leave
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        '200': # status code
+          description: return success message.
+        '409': # status code
+          description: Invalid Id
+        '403': # status code
+          description: Unauthorized User
+      components:
+        securitySchemes:
+          bearerAuth: # arbitrary name for the security scheme
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+      security:
+        - BearerAuth: []
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
